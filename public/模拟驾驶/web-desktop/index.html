@@ -19,6 +19,7 @@
 
     <link rel="stylesheet" type="text/css" href="style.css"/>
     <link rel="icon" href="favicon.ico"/>
+    <base href="./"/>
   </head>
   <body>
    
@@ -38,22 +39,19 @@
 <!-- SystemJS support. -->
 <script src="src/system.bundle.js" charset="utf-8"> </script>
 
-<!-- Dynamically compute baseURL and configure SystemJS + import map -->
+<!-- Inline import map (reliable subdirectory deployment)
+     Inline import map is resolved relative to this HTML page's URL.
+     SystemJS reads <base href="./"> at startup for base path resolution. -->
+<script type="systemjs-importmap">
+{
+  "imports": {
+    "cc": "./cocos-js/cc.js"
+  }
+}
+</script>
+
 <script>
-(function() {
-  var href = window.location.href;
-  var lastSlash = href.lastIndexOf('/');
-  var baseHref = href.substring(0, lastSlash + 1);
-  System.config({ baseURL: baseHref });
-  var importMap = {
-    imports: {
-      "cc": baseHref + 'cocos-js/cc.js'
-    }
-  };
-  System.addImportMap(importMap);
-  System.import(baseHref + 'index.js')
-    .catch(function(err) { console.error(err); });
-})();
+    System.import('./index.js').catch(function(err) { console.error(err); })
 </script>
   </body>
 </html>
