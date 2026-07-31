@@ -951,7 +951,7 @@ function resetAvoidanceModule() {
 }
 
 function openSimulation() {
-  window.open('./模拟驾驶/web-desktop/index.html', '_blank')
+  window.open('./drive_sim/web-desktop/index.html', '_blank')
 }
 
 // 获取车速刻度标记
