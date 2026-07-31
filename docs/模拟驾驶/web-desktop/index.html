@@ -19,7 +19,6 @@
 
     <link rel="stylesheet" type="text/css" href="style.css"/>
     <link rel="icon" href="favicon.ico"/>
-    <base href="./"/>
   </head>
   <body>
    
@@ -39,19 +38,41 @@
 <!-- SystemJS support. -->
 <script src="src/system.bundle.js" charset="utf-8"> </script>
 
-<!-- Inline import map (reliable subdirectory deployment)
-     Inline import map is resolved relative to this HTML page's URL.
-     SystemJS reads <base href="./"> at startup for base path resolution. -->
-<script type="systemjs-importmap">
-{
-  "imports": {
-    "cc": "./cocos-js/cc.js"
-  }
-}
-</script>
-
 <script>
-    System.import('./index.js').catch(function(err) { console.error(err); })
+(function () {
+  // Compute absolute base URL from the current page's location.
+  // This removes any query string / hash AND the trailing filename (index.html),
+  // leaving us with a fully-qualified URL ending in "/".
+  var href = window.location.href.split('#')[0].split('?')[0];
+  var lastSlash = href.lastIndexOf('/');
+  var baseHref = href.substring(0, lastSlash + 1);
+
+  // Build an import-map with ABSOLUTE URLs (computed from baseHref).
+  // Using absolute URLs bypasses ALL relative-path resolution edge cases
+  // (e.g. URL-encoded Chinese characters in the path, <base> tag interactions).
+  var importMap = {
+    imports: {
+      "cc": baseHref + 'cocos-js/cc.js'
+    }
+  };
+
+  // Inject a <script type="systemjs-importmap"> node into <head>.
+  // SystemJS 6.x scans DOM for these nodes via prepareImport().
+  var importMapScript = document.createElement('script');
+  importMapScript.type = 'systemjs-importmap';
+  importMapScript.textContent = JSON.stringify(importMap);
+  document.head.appendChild(importMapScript);
+
+  // Force SystemJS to re-scan the DOM now so the newly injected map is picked up.
+  if (typeof System.prepareImport === 'function') {
+    System.prepareImport(true);
+  }
+
+  // Load the entry module with its absolute URL so the starting point is unambiguous.
+  System.import(baseHref + 'index.js').catch(function (err) {
+    console.error('SystemJS failed to load index.js from ' + baseHref + 'index.js', err);
+  });
+})();
 </script>
   </body>
 </html>
