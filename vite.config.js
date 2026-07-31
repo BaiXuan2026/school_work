@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import path from 'path' // 新增这一行
 
 export default defineConfig({
   plugins: [vue()],
@@ -10,7 +11,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': '/src'
+      '@': path.resolve(__dirname, 'src')
     }
   }
 })
