@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5G-V2X 智能车联网超视距协同避让可视化系统</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <!-- 【修改】更新高德地图 API Key -->
+  <script src="https://webapi.amap.com/maps?v=2.0&key=804456c42dbe47e180970b6e3313479c"></script>
+  <style>
+    /* 【添加】强制隐藏高德地图搜索框及相关控件 */
+    .amap-sug-result,
+    .amap-autocomplete,
+    .amap-toolbar,
+    .amap-search-box,
+    .amap-lib-search,
+    .amap-locate,
+    .amap-logo,
+    .amap-copyright {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
